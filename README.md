@@ -20,7 +20,7 @@ These files are used to manage the local modules.
 
 # Installing Modules
 
-Following our previous example, to install the example module we've just created run `ash self:add git://github.com/brandonromano/example_module.git 1.0.0`.
+Following the example outlined in the [Building Modules Section](#building-modules), to install the example module run `ash self:add git://github.com/brandonromano/example_module.git 1.0.0`.
 
 This will add v1.0.0 of the module to our local `ash_modules.json`.
 
