@@ -102,7 +102,7 @@ After creating your module, you'd likely want to release it to the world.
 
 Well, that's a pretty easy task, as all you have to do is initialize a git repo in your module directory + push it up to a repository.
 
-Users will now be able to install your module, as discussed in the next section.
+Users will now be able to install your module, as discussed in [this section](#installing-modules).
 
 # License
 
