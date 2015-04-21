@@ -44,7 +44,7 @@ Ash__import() {
 #
 # @param $1: The directory to autoload
 #################################################
-Ash__autoload() {
+Ash_autoload() {
     for file in "$1"/*; do
         if [[ -f "$file" ]]; then
             . "$file"
