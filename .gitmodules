@@ -1,0 +1,3 @@
+[submodule "modules/logger"]
+	path = modules/logger
+	url = git@github.com:BrandonRomano/ash-logger.git
