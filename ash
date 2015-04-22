@@ -114,9 +114,9 @@ Ash_dispatch() {
     IFS=':' read -ra segment <<< "$1"
     for part in "${segment[@]}"; do
         if [[ "$position" -eq 1 ]]; then
-            Ash_load_callable "$part"
+            Ash_load_callable_file "$part"
         elif [[ "$position" -eq 2 ]]; then
-            Ash_execute_module_function "$part" "${@:2}"
+            Ash_execute_callable "$part" "${@:2}"
             return
         fi
         position=$((position+1))
@@ -131,7 +131,7 @@ Ash_dispatch() {
 #
 # @param $1: The module name
 #################################################
-Ash_load_callable() {
+Ash_load_callable_file() {
     local module_directory="$(Ash_find_module_directory "$part")"
     local callable_file="$module_directory/$Ash_module_callable_file"
     if [ -e "$callable_file" ]; then
@@ -154,9 +154,15 @@ Ash_load_callable() {
 # @param $1: The function name
 # @param ${@:2} All parameters to the callable
 #################################################
-Ash_execute_module_function() {
-    local prefix="$Ash_module_config_callable_prefix"
-    local function="$prefix"__callable_"$1"
+Ash_execute_callable() {
+    # Checking if callable
+    if [[ -z "$Ash_module_config_callable_prefix" ]]; then
+        Logger__error "Cannot execute any callables, as 'callable_prefix' is not set in this module's ash_config.yaml"
+        return
+    fi
+
+    # Executing the callable function if it exists
+    local function="$Ash_module_config_callable_prefix" __callable_"$1"
     if [[ "$(Ash__is_function "$function")" -eq 1 ]]; then
         $function "${@:2}"
     else
