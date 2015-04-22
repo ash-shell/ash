@@ -9,38 +9,27 @@
 ##################################################
 
 # Constants
-Ash_config_file="ash_config.yaml"
-Ash_modules_file="ash_modules.yaml"
-Ash_modules_folder=".ash_modules"
-
-# Directories + files
-Ash_module_bootstrap_file="bootstrap.sh"
+Ash_config_filename="ash_config.yaml"
+Ash_modules_filename="ash_modules.yaml"
+Ash_modules_foldername=".ash_modules"
+Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
 Ash_global_modules_directory="modules"
+
+# Directories + files
 Ash_call_directory="$( pwd )"
-Ash_config_file="$Ash_call_directory/$Ash_config_file"
-Ash_modules_file="$Ash_call_directory/$Ash_modules_file"
-Ash_modules_directory="$Ash_call_directory/$Ash_modules_folder"
+Ash_config_file="$Ash_call_directory/$Ash_config_filename"
+Ash_modules_file="$Ash_call_directory/$Ash_modules_filename"
+Ash_modules_directory="$Ash_call_directory/$Ash_modules_foldername"
 Ash_source_file=$(readlink ${BASH_SOURCE[0]})
 Ash__source_directory="$(dirname "$Ash_source_file")"
 
-#################################################
-# Imports a module
-#
-# @param $1: The module to load
-#################################################
-Ash__import() {
-    local module_directory="$(Ash_find_module_directory "$1")"
-    if [[ -d "$module_directory" ]]; then
-        Ash__autoload "$module_directory/$Ash_module_lib_directory"
-    else
-        Logger__error "Attempted to import $1 but could not find module"
-        exit
-    fi
-}
+# ===============================================================
+# =========================== Util ==============================
+# ===============================================================
 
 #################################################
-# Autoloads an entire directory, non recursive
+# Autoloads an entire directory, non recursive.
 #
 # @param $1: The directory to autoload
 #################################################
@@ -53,22 +42,19 @@ Ash_autoload() {
 }
 
 #################################################
-# Loads the correct module
+# Autoloads a modules lib directory.
+# Exits if it fails to find the lib directory.
 #
-# @params $@: All parameters passed to Ash
+# @param $1: The module to load
 #################################################
-Ash_dispatch() {
-    IFS=':' read -ra segment <<< "$1"
-    for part in "${segment[@]}"; do
-        local module_directory="$(Ash_find_module_directory "$part")"
-        local bootstrap_file="$module_directory/$Ash_module_bootstrap_file"
-        if [ -e "$bootstrap_file" ]; then
-            . "$bootstrap_file"
-        else
-            Logger__error "Module $part is unknown"
-        fi
-        break
-    done
+Ash_import() {
+    local module_directory="$(Ash_find_module_directory "$1")"
+    if [[ -d "$module_directory" ]]; then
+        Ash_autoload "$module_directory/$Ash_module_lib_directory"
+    else
+        Logger__error "Attempted to import $1 but could not find module"
+        exit
+    fi
 }
 
 #################################################
@@ -96,11 +82,93 @@ Ash_find_module_directory() {
 }
 
 #################################################
+# This function will echo 1 if $1 is a function,
+# 0 otherise.
+#
+# @param $1: The string to test if it's a function
+#################################################
+Ash__is_function() {
+    if [ -n "$(type -t "$1")" ] && [ "$(type -t "$1")" = function ]; then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
+# ===============================================================
+# ========================= Dispatch ============================
+# ===============================================================
+
+#################################################
+# Loads the correct module's callable file
+# to be ready to be called
+#
+# All callable functions will be called with
+# {module}:{function_name}.  This function parses
+# out both components and handles them appropriately.
+#
+# @params $@: All parameters passed to Ash
+#################################################
+Ash_dispatch() {
+    local position=1
+    IFS=':' read -ra segment <<< "$1"
+    for part in "${segment[@]}"; do
+        if [[ "$position" -eq 1 ]]; then
+            Ash_load_callable "$part"
+        elif [[ "$position" -eq 2 ]]; then
+            Ash_execute_module_function "$part"
+            return
+        fi
+        position=$((position+1))
+    done
+
+    # Can only reach here if didn't have two parts
+    Logger__error "Module '$part' requires a callable"
+}
+
+#################################################
+# Loads the correct module callable file
+#
+# @param $1: The module name
+#################################################
+Ash_load_callable() {
+    local module_directory="$(Ash_find_module_directory "$part")"
+    local callable_file="$module_directory/$Ash_module_callable_file"
+    if [ -e "$callable_file" ]; then
+        # Loading up callable file
+        . "$callable_file"
+
+        # Loading in config
+        local config="$module_directory/$Ash_config_filename"
+        eval $(YamlParse__parse "$config" "Ash_module_config_")
+    else
+        Logger__error "Module '$part' is unknown"
+        exit
+    fi
+}
+
+#################################################
+# Dispatches the proper function from the loaded
+# module
+#
+# @param $1: The function name
+#################################################
+Ash_execute_module_function() {
+    local prefix="$Ash_module_config_callable_prefix"
+    local function="$prefix"__callable_"$1"
+    if [[ "$(Ash__is_function "$function")" -eq 1 ]]; then
+        $function
+    else
+        Logger__error "Callable '$1' is unknown"
+    fi
+}
+
+#################################################
 # Displays some basic help/usage for Ash
 #################################################
 Ash_help() {
     # TODO
-    echo "Ash Help"
+    echo "Ash Help -- TODO"
     exit
 }
 
@@ -113,9 +181,12 @@ Ash_start() {
         Ash_help
     fi
 
-    # Importing logger
-    Ash__import "logger"
+    # Importing Logger
+    Ash_import "logger"
     Logger__prefix="Ash"
+
+    # Importing yaml-parse
+    Ash_import "yaml-parse"
 
     # Dispatching to module
     Ash_dispatch "$@"

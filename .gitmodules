@@ -1,3 +1,6 @@
 [submodule "modules/logger"]
 	path = modules/logger
 	url = git@github.com:BrandonRomano/ash-logger.git
+[submodule "modules/yaml-parse"]
+	path = modules/yaml-parse
+	url = git@github.com:BrandonRomano/ash-yaml-parse.git
