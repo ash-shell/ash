@@ -116,7 +116,7 @@ Ash_dispatch() {
         if [[ "$position" -eq 1 ]]; then
             Ash_load_callable "$part"
         elif [[ "$position" -eq 2 ]]; then
-            Ash_execute_module_function "$part"
+            Ash_execute_module_function "$part" "${@:2}"
             return
         fi
         position=$((position+1))
@@ -152,12 +152,13 @@ Ash_load_callable() {
 # module
 #
 # @param $1: The function name
+# @param ${@:2} All parameters to the callable
 #################################################
 Ash_execute_module_function() {
     local prefix="$Ash_module_config_callable_prefix"
     local function="$prefix"__callable_"$1"
     if [[ "$(Ash__is_function "$function")" -eq 1 ]]; then
-        $function
+        $function "${@:2}"
     else
         Logger__error "Callable '$1' is unknown"
     fi
