@@ -67,7 +67,7 @@ Ash_import() {
 #################################################
 Ash_find_module_directory() {
     # Checking Local
-    local call_dir_module="$Ash_call_directory/$Ash_modules_folder/$1"
+    local call_dir_module="$Ash_call_directory/$Ash_modules_foldername/$1"
     if [[ -d $call_dir_module ]]; then
         echo "$call_dir_module"
         return
@@ -132,7 +132,7 @@ Ash_dispatch() {
 # @param $1: The module name
 #################################################
 Ash_load_callable_file() {
-    local module_directory="$(Ash_find_module_directory "$part")"
+    local module_directory="$(Ash_find_module_directory "$1")"
     local callable_file="$module_directory/$Ash_module_callable_file"
     if [ -e "$callable_file" ]; then
         # Loading up callable file
@@ -162,7 +162,7 @@ Ash_execute_callable() {
     fi
 
     # Executing the callable function if it exists
-    local function="$Ash_module_config_callable_prefix" __callable_"$1"
+    local function="$Ash_module_config_callable_prefix"__callable_"$1"
     if [[ "$(Ash__is_function "$function")" -eq 1 ]]; then
         $function "${@:2}"
     else
