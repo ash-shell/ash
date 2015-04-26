@@ -123,7 +123,7 @@ Ash_dispatch() {
     done
 
     # Can only reach here if didn't have two parts
-    Logger__error "Module '$part' requires a callable"
+    Ash_execute_callable "main" "${@:2}"
 }
 
 #################################################
