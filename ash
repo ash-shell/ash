@@ -14,7 +14,8 @@ Ash_modules_filename="ash_modules.yaml"
 Ash_modules_foldername=".ash_modules"
 Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
-Ash_global_modules_directory="modules"
+Ash_global_modules_directory="global-modules"
+Ash_core_modules_directory="core-modules"
 
 # Directories + files
 Ash__call_directory="$( pwd )"
@@ -67,6 +68,13 @@ Ash_import() {
 # @param $1: The module to find
 #################################################
 Ash_find_module_directory() {
+    # Checking Core
+    local core_dir_module="$Ash__source_directory/$Ash_core_modules_directory/$1"
+    if [[ -d $core_dir_module ]]; then
+        echo "$core_dir_module"
+        return
+    fi
+
     # Checking Local
     local call_dir_module="$Ash__call_directory/$Ash_modules_foldername/$1"
     if [[ -d $call_dir_module ]]; then
@@ -184,6 +192,14 @@ Ash_help() {
 }
 
 #################################################
+# Imports all of the core-modules
+#################################################
+Ash_import_core() {
+    Ash_import "yaml-parse"
+    Ash_import "logger"
+}
+
+#################################################
 # The entry point function
 #################################################
 Ash_start() {
@@ -192,12 +208,11 @@ Ash_start() {
         Ash_help
     fi
 
-    # Importing Logger
-    Ash_import "logger"
-    Logger__prefix="Ash"
+    # Importing the core
+    Ash_import_core
 
-    # Importing yaml-parse
-    Ash_import "yaml-parse"
+    # Updating Logger prefix
+    Logger__prefix="Ash"
 
     # Dispatching to module
     Ash_dispatch "$@"
