@@ -141,6 +141,9 @@ Ash_load_callable_file() {
         # Loading in config
         local config="$module_directory/$Ash_config_filename"
         eval $(YamlParse__parse "$config" "Ash_module_config_")
+
+        # Updating Logger's prefix
+        Logger__prefix="$Ash_module_config_name"
     else
         Logger__error "Module '$part' is unknown"
         exit
