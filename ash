@@ -17,12 +17,13 @@ Ash_module_lib_directory="lib"
 Ash_global_modules_directory="modules"
 
 # Directories + files
-Ash_call_directory="$( pwd )"
-Ash_config_file="$Ash_call_directory/$Ash_config_filename"
-Ash_modules_file="$Ash_call_directory/$Ash_modules_filename"
-Ash_modules_directory="$Ash_call_directory/$Ash_modules_foldername"
+Ash__call_directory="$( pwd )"
+Ash_config_file="$Ash__call_directory/$Ash_config_filename"
+Ash_modules_file="$Ash__call_directory/$Ash_modules_filename"
+Ash_modules_directory="$Ash__call_directory/$Ash_modules_foldername"
 Ash_source_file=$(readlink ${BASH_SOURCE[0]})
 Ash__source_directory="$(dirname "$Ash_source_file")"
+Ash__active_module_directory="" # Determined at runtime
 
 # ===============================================================
 # =========================== Util ==============================
@@ -67,7 +68,7 @@ Ash_import() {
 #################################################
 Ash_find_module_directory() {
     # Checking Local
-    local call_dir_module="$Ash_call_directory/$Ash_modules_foldername/$1"
+    local call_dir_module="$Ash__call_directory/$Ash_modules_foldername/$1"
     if [[ -d $call_dir_module ]]; then
         echo "$call_dir_module"
         return
@@ -132,14 +133,14 @@ Ash_dispatch() {
 # @param $1: The module name
 #################################################
 Ash_load_callable_file() {
-    local module_directory="$(Ash_find_module_directory "$1")"
-    local callable_file="$module_directory/$Ash_module_callable_file"
+    Ash__active_module_directory="$(Ash_find_module_directory "$1")"
+    local callable_file="$Ash__active_module_directory/$Ash_module_callable_file"
     if [ -e "$callable_file" ]; then
         # Loading up callable file
         . "$callable_file"
 
         # Loading in config
-        local config="$module_directory/$Ash_config_filename"
+        local config="$Ash__active_module_directory/$Ash_config_filename"
         eval $(YamlParse__parse "$config" "Ash_module_config_")
 
         # Updating Logger's prefix
