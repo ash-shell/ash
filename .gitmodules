@@ -1,0 +1,3 @@
+[submodule "core-modules/self"]
+	path = core-modules/self
+	url = git@github.com:BrandonRomano/ash-self.git
