@@ -14,8 +14,8 @@ Ash_modules_filename="ash_modules.yaml"
 Ash_modules_foldername=".ash_modules"
 Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
-Ash_global_modules_directory="global-modules"
-Ash_core_modules_directory="core-modules"
+Ash_global_modules_directory="global_modules"
+Ash_core_modules_directory="core_modules"
 
 # Directories + files
 Ash__call_directory="$( pwd )"
