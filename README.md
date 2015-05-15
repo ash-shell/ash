@@ -106,5 +106,5 @@ Users will now be able to install your module, as discussed in [this section](#i
 
 # License
 
-ash is licensed under [MIT](license.md)
+ash is licensed under [MIT](LICENSE.md)
 

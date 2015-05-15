@@ -26,9 +26,34 @@ Ash_source_file=$(readlink ${BASH_SOURCE[0]})
 Ash__source_directory="$(dirname "$Ash_source_file")"
 Ash__active_module_directory="" # Determined at runtime
 
+# Platform
+Ash__active_platform=''
+Ash__PLATFORM_UNKNOWN='unknown'
+Ash__PLATFORM_LINUX='linux'
+Ash__PLATFORM_FREEBSD='freebsd'
+Ash__PLATFORM_DARWIN='darwin'
+
 # ===============================================================
 # =========================== Util ==============================
 # ===============================================================
+
+#################################################
+# Determines the active platform and wraps the
+# result into an enumerated easily testable value
+#################################################
+Ash_determine_platform() {
+    local platform="$Ash__PLATFORM_UNKNOWN"
+    local uname_string=$(uname)
+    if [[ "$uname_string" == 'Linux' ]]; then
+        platform="$Ash__PLATFORM_LINUX"
+    elif [[ "$uname_string" == 'FreeBSD' ]]; then
+        platform="$Ash__PLATFORM_FREEBSD"
+    elif [[ "$uname_string" == 'Darwin' ]]; then
+        platform="$Ash__PLATFORM_DARWIN"
+    fi
+
+    echo "$platform"
+}
 
 #################################################
 # Autoloads an entire directory, non recursive.
@@ -207,6 +232,9 @@ Ash_start() {
     if [[ -z "$1" || "$1" = "--help" ]]; then
         Ash_help
     fi
+
+    # Determining platform
+    Ash__active_platform="$(Ash_determine_platform)"
 
     # Importing the core
     Ash_import_core
