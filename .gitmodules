@@ -7,6 +7,6 @@
 [submodule "core_modules/slugify"]
 	path = core_modules/slugify
 	url = git@github.com:BrandonRomano/ash-slugify.git
-[submodule "logger"]
+[submodule "core_modules/logger"]
 	path = core_modules/logger
 	url = git@github.com:BrandonRomano/ash-logger.git
