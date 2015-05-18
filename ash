@@ -217,7 +217,8 @@ Ash_help() {
 }
 
 #################################################
-# Imports all of the core-modules
+# Imports all of the libraries needed by
+# the core to run
 #################################################
 Ash_import_core() {
     Ash_import "yaml-parse"
