@@ -11,7 +11,7 @@
 # Constants
 Ash_config_filename="ash_config.yaml"
 Ash_modules_filename="ash_modules.yaml"
-Ash_modules_foldername=".ash_modules"
+Ash__modules_foldername="ash_modules"
 Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
 Ash_global_modules_directory="global_modules"
@@ -21,7 +21,7 @@ Ash_core_modules_directory="core_modules"
 Ash__call_directory="$( pwd )"
 Ash_config_file="$Ash__call_directory/$Ash_config_filename"
 Ash_modules_file="$Ash__call_directory/$Ash_modules_filename"
-Ash_modules_directory="$Ash__call_directory/$Ash_modules_foldername"
+Ash_modules_directory="$Ash__call_directory/$Ash__modules_foldername"
 Ash_source_file=$(readlink ${BASH_SOURCE[0]})
 Ash__source_directory="$(dirname "$Ash_source_file")"
 Ash__active_module_directory="" # Determined at runtime
@@ -101,7 +101,7 @@ Ash_find_module_directory() {
     fi
 
     # Checking Local
-    local call_dir_module="$Ash__call_directory/$Ash_modules_foldername/$1"
+    local call_dir_module="$Ash__call_directory/$Ash__modules_foldername/$1"
     if [[ -d $call_dir_module ]]; then
         echo "$call_dir_module"
         return
