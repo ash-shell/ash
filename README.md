@@ -1,12 +1,40 @@
-# ash
+# Ash
 
-A framework to manage + build command-line tools in any language
+Ash is a modular Bash framework written with ease of use + reusability in mind.
 
 # Why should you care?
 
-Building command line tools in most languages is an extremely tedious and somewhat enigmatic task.  There are tools available for some languages, but for the languages that don't have a streamlined process you're out of luck.
+Building command line tools in Bash is an extremely tedious and somewhat enigmatic task.  There's quite a bit of boilerplate code you're going to have to write if you want your script to do more than just one thing, which will only clutter your script.
 
-Ash leverages one of the best feature of Bash: it's ease of interfacing with different programming languages.  Using this, ash allows us to build command-line tools in any language.
+Ash helps you get rid of all of your boilerplate, and allows you dive right into the code by letting you call functions straight from the command line.
+
+# A quick teaser
+
+If you were to create a module named `module`, you could have a file like this:
+
+```bash
+Module__callable_main() {
+    echo "Main!!"
+}
+
+Module__callable_other() {
+    echo "Other param: $1"
+}
+```
+
+You could then directly call these functions like this:
+
+```bash
+ash module:main
+ash module:other SomeParam
+```
+
+which would output:
+
+```
+Main!!
+Other param: SomeParam
+```
 
 # Installation
 
