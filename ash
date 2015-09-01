@@ -8,6 +8,12 @@
 #  |_||_| (_)_/   |_.__/|_|_| |_/_/ \__,_|___/_| |_|
 ##################################################
 
+# Importing .ashrc
+Ash_rc_file="$HOME/.ashrc"
+if [[ -e "$Ash_rc_file" ]]; then
+    . "$Ash_rc_file"
+fi
+
 # Constants
 Ash_config_filename="ash_config.yaml"
 Ash_modules_filename="ash_modules.yaml"
