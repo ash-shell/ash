@@ -10,3 +10,6 @@
 [submodule "core_modules/logger"]
 	path = core_modules/logger
 	url = git@github.com:BrandonRomano/ash-logger.git
+[submodule "core_modules/obj"]
+	path = core_modules/obj
+	url = git@github.com:BrandonRomano/ash-obj.git
