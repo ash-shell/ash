@@ -22,6 +22,7 @@ Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
 Ash_global_modules_directory="global_modules"
 Ash_core_modules_directory="core_modules"
+Ash_module_classes_folder="classes"
 
 # Directories + files
 Ash__call_directory="$( pwd )"
@@ -173,6 +174,7 @@ Ash_dispatch() {
 #################################################
 Ash_load_callable_file() {
     Ash__active_module_directory="$(Ash_find_module_directory "$1")"
+    Obj__classes_directory="$Ash__active_module_directory/$Ash_module_classes_folder"
     local callable_file="$Ash__active_module_directory/$Ash_module_callable_file"
     if [ -e "$callable_file" ]; then
         # Loading up callable file
@@ -229,6 +231,7 @@ Ash_help() {
 Ash_import_core() {
     Ash__import "yaml-parse"
     Ash__import "logger"
+    Ash__import "obj"
 }
 
 #################################################
