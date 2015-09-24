@@ -10,12 +10,12 @@ Ash helps you get rid of all of your boilerplate, and allows you dive right into
 
 # Installation
 
-First, start off by cloning this repo down to your computer to somewhere you'd like to keep your scripts.
+#
 
-After you have the directory in a good place, symlink the file named `ash`, which is in the root of this repo to somewhere in your $PATH.  `/usr/local/bin` is usually a good place to start.
+Run this line right here, and you should be good to go:
 
 ```
-ln -s /path/to/cloned/ash/ash /usr/local/bin/ash
+curl https://raw.githubusercontent.com/BrandonRomano/ash/master/install.sh | sh
 ```
 
 # Creating modules
