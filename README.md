@@ -30,6 +30,14 @@ TODO
 
 TODO
 
+# The .ashrc File
+
+The `.ashrc` file is a file loaded in by the Ash core which you can use in configuring your modules.  The `.ashrc` file is located in your home directory `~/.ashrc` (you're going to have to create this file yourself).
+
+This file is optional in terms of the Ash core, but may be required for some modules that require an `.ashrc` configuration.
+
+It's worth noting that this is the *first* thing that is loaded in Ash, so module writers don't have to worry about a users `.ashrc` causing any variable/function collisions with their modules, as everything in your module is loaded after and will take priority.
+
 # License
 
 Ash is licensed under [MIT](LICENSE.md)
