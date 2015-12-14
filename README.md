@@ -15,7 +15,7 @@ Ash helps you get rid of all of your boilerplate, and allows you dive right into
 Run this line right here, and you should be good to go:
 
 ```
-curl https://raw.githubusercontent.com/BrandonRomano/ash/master/install.sh | sh
+curl https://raw.githubusercontent.com/ash-shell/ash/master/install.sh | sh
 ```
 
 # Creating modules
