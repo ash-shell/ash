@@ -156,6 +156,7 @@ Ash_dispatch() {
     for part in "${segment[@]}"; do
         if [[ "$position" -eq 1 ]]; then
             Ash_load_callable_file "$part"
+            Ash__import "$part"
         elif [[ "$position" -eq 2 ]]; then
             Ash_execute_callable "$part" "${@:2}"
             return
