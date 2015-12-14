@@ -1,15 +1,15 @@
-[submodule "core-modules/self"]
-	path = core_modules/self
-	url = git@github.com:BrandonRomano/ash-self.git
-[submodule "core_modules/yaml-parse"]
-	path = core_modules/yaml-parse
-	url = git@github.com:BrandonRomano/ash-yaml-parse.git
-[submodule "core_modules/slugify"]
-	path = core_modules/slugify
-	url = git@github.com:BrandonRomano/ash-slugify.git
 [submodule "core_modules/logger"]
 	path = core_modules/logger
-	url = git@github.com:BrandonRomano/ash-logger.git
+	url = https://github.com/ash-shell/logger.git
 [submodule "core_modules/obj"]
 	path = core_modules/obj
-	url = git@github.com:BrandonRomano/ash-obj.git
+	url = https://github.com/ash-shell/obj.git
+[submodule "core_modules/self"]
+	path = core_modules/self
+	url = https://github.com/ash-shell/self.git
+[submodule "core_modules/slugify"]
+	path = core_modules/slugify
+	url = https://github.com/ash-shell/slugify.git
+[submodule "core_modules/yaml-parse"]
+	path = core_modules/yaml-parse
+	url = https://github.com/ash-shell/yaml-parse.git
