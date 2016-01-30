@@ -1,0 +1,5 @@
+apm: github.com/ash-shell/apm
+logger: github.com/ash-shell/logger
+obj: github.com/ash-shell/obj
+slugify: github.com/ash-shell/slugify
+yamlparse: github.com/ash-shell/yaml-parse

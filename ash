@@ -14,6 +14,10 @@ if [[ -e "$Ash_rc_file" ]]; then
     . "$Ash_rc_file"
 fi
 
+# Types
+Ash__true="true"
+Ash__false="false"
+
 # Constants
 Ash_config_filename="ash_config.yaml"
 Ash_modules_filename="ash_modules.yaml"
@@ -23,6 +27,7 @@ Ash_module_lib_directory="lib"
 Ash_global_modules_directory="global_modules"
 Ash_core_modules_directory="core_modules"
 Ash_module_classes_folder="classes"
+Ash_module_aliases_file="module_aliases.yaml"
 
 # Directories + files
 Ash__call_directory="$( pwd )"
@@ -80,9 +85,12 @@ Ash_autoload() {
 # Exits if it fails to find the lib directory.
 #
 # @param $1: The module to load
+# @param $2: 1 if we should check aliases, 0 otherwise
+#       it is safe to omit this parameter if you don't
+#       need to check aliases
 #################################################
 Ash__import() {
-    local module_directory="$(Ash_find_module_directory "$1")"
+    local module_directory="$(Ash_find_module_directory "$1" "$2")"
     if [[ -d "$module_directory" ]]; then
         Ash_autoload "$module_directory/$Ash_module_lib_directory"
     else
@@ -98,26 +106,67 @@ Ash__import() {
 # there is nothing in global
 #
 # @param $1: The module to find
+# @param $2: 1 if we should check aliases, 0 otherwise
 #################################################
 Ash_find_module_directory() {
+    local directory=""
+
     # Checking Core
-    local core_dir_module="$Ash__source_directory/$Ash_core_modules_directory/$1"
-    if [[ -d $core_dir_module ]]; then
-        echo "$core_dir_module"
+    local core_module_directory="$Ash__source_directory/$Ash_core_modules_directory"
+    directory=$(Ash_find_module_directory_single "$1" "$2" "$core_module_directory")
+    if [[ "$directory" != "" ]]; then
+        echo "$directory"
         return
     fi
 
     # Checking Local
-    local call_dir_module="$Ash__call_directory/$Ash__modules_foldername/$1"
-    if [[ -d $call_dir_module ]]; then
-        echo "$call_dir_module"
+    local local_module_directory="$Ash__call_directory/$Ash__modules_foldername"
+    directory=$(Ash_find_module_directory_single "$1" "$2" "$local_module_directory")
+    if [[ "$directory" != "" ]]; then
+        echo "$directory"
         return
     fi
 
     # Checking Global
-    local global_dir_module="$Ash__source_directory/$Ash_global_modules_directory/$1"
-    if [[ -d $global_dir_module ]]; then
-        echo "$global_dir_module"
+    local global_module_directory="$Ash__source_directory/$Ash_global_modules_directory"
+    directory=$(Ash_find_module_directory_single "$1" "$2" "$global_module_directory")
+    if [[ "$directory" != "" ]]; then
+        echo "$directory"
+        return
+    fi
+}
+
+#################################################
+# Attempts to find a modules directory from
+# a single module location
+#
+# @param $1: The module to find
+# @param $2: 1 if we should check aliases, 0 otherwise
+# @param $3: The module directory to check in
+#################################################
+Ash_find_module_directory_single() {
+    local module="$1"
+    local check_aliases="$2"
+    local module_directory="$3"
+
+    # Checking if we should expand aliases
+    if [[ "$check_aliases" -eq 1 ]]; then
+        local aliases_file="$module_directory/$Ash_module_aliases_file"
+        if [[ -f "$aliases_file" ]]; then
+            # Expanding aliases
+            eval $(YamlParse__parse "$aliases_file" "Ash_alias_")
+
+            local alias_variable="Ash_alias_$module"
+            if [[ ${!alias_variable} != "" ]]; then
+                module=${!alias_variable}
+            fi
+        fi
+    fi
+
+    # Checking if module directory exists
+    local module="$module_directory/$module"
+    if [[ -d $module ]]; then
+        echo "$module"
         return
     fi
 }
@@ -156,7 +205,7 @@ Ash_dispatch() {
     for part in "${segment[@]}"; do
         if [[ "$position" -eq 1 ]]; then
             Ash_load_callable_file "$part"
-            Ash__import "$part"
+            Ash__import "$part" "1"
         elif [[ "$position" -eq 2 ]]; then
             Ash_execute_callable "$part" "${@:2}"
             return
@@ -174,7 +223,7 @@ Ash_dispatch() {
 # @param $1: The module name
 #################################################
 Ash_load_callable_file() {
-    Ash__active_module_directory="$(Ash_find_module_directory "$1")"
+    Ash__active_module_directory="$(Ash_find_module_directory "$1" "1")"
     Obj__classes_directory="$Ash__active_module_directory/$Ash_module_classes_folder"
     local callable_file="$Ash__active_module_directory/$Ash_module_callable_file"
     if [ -e "$callable_file" ]; then
@@ -230,9 +279,9 @@ Ash_help() {
 # the core to run
 #################################################
 Ash_import_core() {
-    Ash__import "yaml-parse"
-    Ash__import "logger"
-    Ash__import "obj"
+    Ash__import "github.com/ash-shell/logger"
+    Ash__import "github.com/ash-shell/yaml-parse"
+    Ash__import "github.com/ash-shell/obj"
 }
 
 #################################################
