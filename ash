@@ -235,7 +235,7 @@ Ash_load_callable_file() {
         eval $(YamlParse__parse "$config" "Ash_module_config_")
 
         # Updating Logger's prefix
-        Logger__prefix="$Ash_module_config_name"
+        Logger__set_prefix "$Ash_module_config_name"
     else
         Logger__error "Module '$part' is unknown"
         exit
@@ -300,7 +300,7 @@ Ash_start() {
     Ash_import_core
 
     # Updating Logger prefix
-    Logger__prefix="Ash"
+    Logger__set_prefix "Ash"
 
     # Dispatching to module
     Ash_dispatch "$@"
