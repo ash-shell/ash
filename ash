@@ -8,15 +8,15 @@
 #  |_||_| (_)_/   |_.__/|_|_| |_/_/ \__,_|___/_| |_|
 ##################################################
 
+# Types
+Ash__true="true"
+Ash__false="false"
+
 # Importing .ashrc
 Ash_rc_file="$HOME/.ashrc"
 if [[ -e "$Ash_rc_file" ]]; then
     . "$Ash_rc_file"
 fi
-
-# Types
-Ash__true="true"
-Ash__false="false"
 
 # Constants
 Ash_config_filename="ash_config.yaml"
