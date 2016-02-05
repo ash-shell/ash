@@ -25,7 +25,7 @@ Ash__modules_foldername="ash_modules"
 Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
 Ash_global_modules_directory="global_modules"
-Ash_core_modules_directory="core_modules"
+Ash__core_modules_directory="core_modules"
 Ash_module_classes_folder="classes"
 Ash_module_aliases_file="module_aliases.yaml"
 
@@ -112,7 +112,7 @@ Ash_find_module_directory() {
     local directory=""
 
     # Checking Core
-    local core_module_directory="$Ash__source_directory/$Ash_core_modules_directory"
+    local core_module_directory="$Ash__source_directory/$Ash__core_modules_directory"
     directory=$(Ash_find_module_directory_single "$1" "$2" "$core_module_directory")
     if [[ "$directory" != "" ]]; then
         echo "$directory"
