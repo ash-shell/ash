@@ -235,7 +235,7 @@ Ash_load_callable_file() {
 
         # Setting the Obj "this" package
         echo "$Ash_module_config_package"
-        Obj__import "$Ash_module_config_package" "this"
+        Obj__import "$Ash_module_config_package" "$Obj__THIS"
 
         # Updating Logger's prefix
         Logger__set_prefix "$Ash_module_config_name"
