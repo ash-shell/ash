@@ -4,9 +4,6 @@
 [submodule "core_modules/obj"]
 	path = core_modules/github.com/ash-shell/obj
 	url = https://github.com/ash-shell/obj.git
-[submodule "core_modules/slugify"]
-	path = core_modules/github.com/ash-shell/slugify
-	url = https://github.com/ash-shell/slugify.git
 [submodule "core_modules/yaml-parse"]
 	path = core_modules/github.com/ash-shell/yaml-parse
 	url = https://github.com/ash-shell/yaml-parse.git
