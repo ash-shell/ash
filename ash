@@ -26,7 +26,7 @@ Ash_module_callable_file="callable.sh"
 Ash_module_lib_directory="lib"
 Ash_global_modules_directory="global_modules"
 Ash__core_modules_directory="core_modules"
-Ash_module_classes_folder="classes"
+Ash__module_classes_folder="classes"
 Ash_module_aliases_file="module_aliases.yaml"
 
 # Directories + files
@@ -90,7 +90,7 @@ Ash_autoload() {
 #       need to check aliases
 #################################################
 Ash__import() {
-    local module_directory="$(Ash_find_module_directory "$1" "$2")"
+    local module_directory="$(Ash__find_module_directory "$1" "$2")"
     if [[ -d "$module_directory" ]]; then
         Ash_autoload "$module_directory/$Ash_module_lib_directory"
     else
@@ -108,7 +108,7 @@ Ash__import() {
 # @param $1: The module to find
 # @param $2: 1 if we should check aliases, 0 otherwise
 #################################################
-Ash_find_module_directory() {
+Ash__find_module_directory() {
     local directory=""
 
     # Checking Core
@@ -223,8 +223,7 @@ Ash_dispatch() {
 # @param $1: The module name
 #################################################
 Ash_load_callable_file() {
-    Ash__active_module_directory="$(Ash_find_module_directory "$1" "1")"
-    Obj__classes_directory="$Ash__active_module_directory/$Ash_module_classes_folder"
+    Ash__active_module_directory="$(Ash__find_module_directory "$1" "1")"
     local callable_file="$Ash__active_module_directory/$Ash_module_callable_file"
     if [ -e "$callable_file" ]; then
         # Loading up callable file
@@ -233,6 +232,10 @@ Ash_load_callable_file() {
         # Loading in config
         local config="$Ash__active_module_directory/$Ash_config_filename"
         eval $(YamlParse__parse "$config" "Ash_module_config_")
+
+        # Setting the Obj "this" package
+        echo "$Ash_module_config_package"
+        Obj__import "$Ash_module_config_package" "$Obj__THIS"
 
         # Updating Logger's prefix
         Logger__set_prefix "$Ash_module_config_name"
