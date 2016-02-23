@@ -234,7 +234,6 @@ Ash_load_callable_file() {
         eval $(YamlParse__parse "$config" "Ash_module_config_")
 
         # Setting the Obj "this" package
-        echo "$Ash_module_config_package"
         Obj__import "$Ash_module_config_package" "$Obj__THIS"
 
         # Updating Logger's prefix
