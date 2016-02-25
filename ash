@@ -8,52 +8,40 @@
 #  |_||_| (_)_/   |_.__/|_|_| |_/_/ \__,_|___/_| |_|
 ##################################################
 
-# Types
-Ash__true="true"
-Ash__false="false"
+# ========== Types ==========
 
-# Importing .ashrc
-Ash_rc_file="$HOME/.ashrc"
-if [[ -e "$Ash_rc_file" ]]; then
-    . "$Ash_rc_file"
-fi
+# Booleans
+Ash__TRUE="true"
+Ash__FALSE="false"
 
-# Constants
-Ash_config_filename="ash_config.yaml"
-Ash_modules_filename="ash_modules.yaml"
-Ash__modules_foldername="ash_modules"
-Ash_module_callable_file="callable.sh"
-Ash_module_lib_directory="lib"
-Ash_global_modules_directory="global_modules"
-Ash__core_modules_directory="core_modules"
-Ash__module_classes_folder="classes"
-Ash_module_aliases_file="module_aliases.yaml"
-
-# Directories + files
-Ash__call_directory="$( pwd )"
-Ash_config_file="$Ash__call_directory/$Ash_config_filename"
-Ash_modules_file="$Ash__call_directory/$Ash_modules_filename"
-Ash_modules_directory="$Ash__call_directory/$Ash__modules_foldername"
-Ash_source_file=$(readlink ${BASH_SOURCE[0]})
-Ash__source_directory="$(dirname "$Ash_source_file")"
-Ash__active_module_directory="" # Determined at runtime
-
-# Platform
-Ash__active_platform=''
+# Platforms
 Ash__PLATFORM_UNKNOWN='unknown'
 Ash__PLATFORM_LINUX='linux'
 Ash__PLATFORM_FREEBSD='freebsd'
 Ash__PLATFORM_DARWIN='darwin'
 
-# ===============================================================
-# =========================== Util ==============================
-# ===============================================================
+# ========== Directories + Files ==========
+
+Ash__CONFIG_FILENAME="ash_config.yaml"
+Ash__MODULES_FILENAME="ash_modules.yaml"
+Ash__MODULES_FOLDERNAME="ash_modules"
+Ash__MODULE_CALLABLE_FILE="callable.sh"
+Ash__MODULE_LIB_DIRECTORY="lib"
+Ash__GLOBAL_MODULES_DIRECTORY="global_modules"
+Ash__CORE_MODULES_DIRECTORY="core_modules"
+Ash__MODULE_CLASSES_DIRECTORY="classes"
+Ash__MODULE_ALIASES_FILE="module_aliases.yaml"
+Ash__CALL_DIRECTORY="$( pwd )"
+Ash__SOURCE_FILE=$(readlink ${BASH_SOURCE[0]})
+Ash__SOURCE_DIRECTORY="$(dirname "$Ash__SOURCE_FILE")"
+Ash__ACTIVE_MODULE_DIRECTORY="" # Determined at runtime
+Ash__RC_FILE="$HOME/.ashrc"
 
 #################################################
 # Determines the active platform and wraps the
 # result into an enumerated easily testable value
 #################################################
-Ash_determine_platform() {
+Ash__get_active_platform() {
     local platform="$Ash__PLATFORM_UNKNOWN"
     local uname_string=$(uname)
     if [[ "$uname_string" == 'Linux' ]]; then
@@ -65,6 +53,15 @@ Ash_determine_platform() {
     fi
 
     echo "$platform"
+}
+
+#################################################
+# Imports the ashrc file, if it exists
+#################################################
+Ash_import_ashrc() {
+    if [[ -e "$Ash__RC_FILE" ]]; then
+        . "$Ash__RC_FILE"
+    fi
 }
 
 #################################################
@@ -92,7 +89,7 @@ Ash_autoload() {
 Ash__import() {
     local module_directory="$(Ash__find_module_directory "$1" "$2")"
     if [[ -d "$module_directory" ]]; then
-        Ash_autoload "$module_directory/$Ash_module_lib_directory"
+        Ash_autoload "$module_directory/$Ash__MODULE_LIB_DIRECTORY"
     else
         Logger__error "Attempted to import $1 but could not find module"
         exit
@@ -112,7 +109,7 @@ Ash__find_module_directory() {
     local directory=""
 
     # Checking Core
-    local core_module_directory="$Ash__source_directory/$Ash__core_modules_directory"
+    local core_module_directory="$Ash__SOURCE_DIRECTORY/$Ash__CORE_MODULES_DIRECTORY"
     directory=$(Ash_find_module_directory_single "$1" "$2" "$core_module_directory")
     if [[ "$directory" != "" ]]; then
         echo "$directory"
@@ -120,7 +117,7 @@ Ash__find_module_directory() {
     fi
 
     # Checking Local
-    local local_module_directory="$Ash__call_directory/$Ash__modules_foldername"
+    local local_module_directory="$Ash__CALL_DIRECTORY/$Ash__MODULES_FOLDERNAME"
     directory=$(Ash_find_module_directory_single "$1" "$2" "$local_module_directory")
     if [[ "$directory" != "" ]]; then
         echo "$directory"
@@ -128,7 +125,7 @@ Ash__find_module_directory() {
     fi
 
     # Checking Global
-    local global_module_directory="$Ash__source_directory/$Ash_global_modules_directory"
+    local global_module_directory="$Ash__SOURCE_DIRECTORY/$Ash__GLOBAL_MODULES_DIRECTORY"
     directory=$(Ash_find_module_directory_single "$1" "$2" "$global_module_directory")
     if [[ "$directory" != "" ]]; then
         echo "$directory"
@@ -151,7 +148,7 @@ Ash_find_module_directory_single() {
 
     # Checking if we should expand aliases
     if [[ "$check_aliases" -eq 1 ]]; then
-        local aliases_file="$module_directory/$Ash_module_aliases_file"
+        local aliases_file="$module_directory/$Ash__MODULE_ALIASES_FILE"
         if [[ -f "$aliases_file" ]]; then
             # Expanding aliases
             eval $(YamlParse__parse "$aliases_file" "Ash_alias_")
@@ -223,14 +220,14 @@ Ash_dispatch() {
 # @param $1: The module name
 #################################################
 Ash_load_callable_file() {
-    Ash__active_module_directory="$(Ash__find_module_directory "$1" "1")"
-    local callable_file="$Ash__active_module_directory/$Ash_module_callable_file"
+    Ash__ACTIVE_MODULE_DIRECTORY="$(Ash__find_module_directory "$1" "1")"
+    local callable_file="$Ash__ACTIVE_MODULE_DIRECTORY/$Ash__MODULE_CALLABLE_FILE"
     if [ -e "$callable_file" ]; then
         # Loading up callable file
         . "$callable_file"
 
         # Loading in config
-        local config="$Ash__active_module_directory/$Ash_config_filename"
+        local config="$Ash__ACTIVE_MODULE_DIRECTORY/$Ash__CONFIG_FILENAME"
         eval $(YamlParse__parse "$config" "Ash_module_config_")
 
         # Setting the Obj "this" package
@@ -290,13 +287,13 @@ Ash_import_core() {
 # The entry point function
 #################################################
 Ash_start() {
+    # Import ashrc file
+    Ash_import_ashrc
+
     # Checking if user needs help
     if [[ -z "$1" || "$1" = "--help" ]]; then
         Ash_help
     fi
-
-    # Determining platform
-    Ash__active_platform="$(Ash_determine_platform)"
 
     # Importing the core
     Ash_import_core
