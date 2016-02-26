@@ -2,21 +2,124 @@
 
 Ash is a modular Bash framework written with ease of use + reusability in mind.
 
+> **Note:** This project is in early development, and versioning is a little different. [Read this](http://markup.im/#q4_cRZ1Q) for more details.
+
 # Why should you care?
 
 Building command line tools in Bash is an extremely tedious and somewhat enigmatic task.  There's quite a bit of boilerplate code you're going to have to write if you want your script to do more than just one thing, which will only clutter your script.
 
 Ash helps you get rid of all of your boilerplate, and allows you dive right into the code by letting you call functions straight from the command line.
 
-# Installation
+Most importantly, Ash is a modular framework.  You are able to build a module independently that functions as a CLI or a library (or any combination of the two), and easily share your module with the world.
 
-#
+# Installation
 
 Run this line right here, and you should be good to go:
 
 ```
 curl https://raw.githubusercontent.com/ash-shell/ash/master/install.sh | sh
 ```
+
+# Modules
+
+Modules are the fundamental building blocks of Ash.  They allow you to build out custom CLI's that can be called from Ash, and libraries that can be used in any other Ash module.
+
+> In this section I will be building a hypothetical module called `Wrecker`
+
+## Module Structure
+
+A module looks something like this:
+
+```
+├── ash_config.yaml
+├── callable.sh
+├── classes
+│   └── WreckerClass.sh
+|   └── ...
+└── lib
+    └── wrecker_library_file.sh
+    └── ...
+```
+
+> Feel free to add any folders or files you want to this -- this is simply the base structure that Ash uses.  You can't break anything by adding new folders or files.  You'll see I've even done this myself, in [ash-make](https://github.com/ash-shell/ash-make).
+
+#### ash_config.yaml
+
+This is the only required file in an Ash module.  This file tells Ash that your project is an Ash module.
+
+Here is an example `ash_config.yaml` file:
+
+```yaml
+name: Wrecker
+package: github.com/ash-shell/wrecker
+default_alias: wrecker
+callable_prefix: Wrecker
+```
+
+**name**: This is the human readable name of your module.  This value is used by other modules who might want to output the name of the current module.  This field is **required**.
+
+**package**: This is the unique identifier to your project.  I strongly suggest keeping this the same as your git/scm project url, or at minimum scoped under a domain you own to prevent any collisions with other ash modules.  This field is **required**.
+
+**default_alias**: This is the default alias of your project.  When you install a module, it has to be aliased so it can reasonably be called by ash from the command line.  This value should be something short and sweet, and you don't need to worry about collisions with other packages (the user will be asked to come up with a new alias in the event there is a collision).  This field is **required**.
+
+**callable_prefix**: This field specifies the function prefix that Ash looks for in the callable file when calling upon a module (more detail in [the section below](#callable-modules)).  This field is only required for modules that provide a callable file.
+
+#### callable.sh
+
+This file is only required if you want your library to be callable.  The contents of this file are explained in [this section](#callable-modules).
+
+#### classes
+
+This directory is where you would place your modules classes.  This is an optional folder.
+
+The README of [ash-shell/obj](https://github.com/ash-shell/obj) goes into full detail of how this all works.
+
+> TLDR: Ash has native Bash object support
+
+#### lib
+
+This is another optional directory.  If you want your module to provide a functional based library, this is where you would place those files.
+
+Other packages will be able to import all of the root files in the `lib` directory via `Ash__import "your/modules/package/name"`.  You can nest folders inside of `lib` for structure, but you'll need to manage importing them yourself ash `Ash__import` won't grab them.
+
+Files in the `lib` directory are auto loaded for you in the callable portions of your module, so you don't have to import your own module.
+
+## Callable Modules
+
+You can build your module to be directly callable from the command line.
+
+The first thing you will need to do in your module is add `callable_prefix` to your [ash_config.yaml](#ash-config-yaml) file.
+
+```yaml
+callable_prefix: Wrecker
+```
+
+Now you can create a `callable.sh` file and add it to the root of your project.
+
+> One of the most important things to understand about callable files is that they are just bash files.  They provide immediate access all variables set in the [ash file](/ash), and all of the [core module libraries](/core_modules).
+
+Your newly created callable file will look something like this:
+
+```bash
+# This is a callable function because the `callable_prefix`
+Wrecker__callable_echo(){
+
+}
+
+Wrecker__callable_main(){
+
+}
+```
+
+
+## Library Modules
+
+
+
+
+
+# Using Modules
+
 
 # Creating modules
 
