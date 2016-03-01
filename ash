@@ -268,8 +268,8 @@ Ash_execute_callable() {
 # Displays some basic help/usage for Ash
 #################################################
 Ash_help() {
-    # TODO
-    echo "Ash Help -- TODO"
+    echo
+    more "$Ash__SOURCE_DIRECTORY/HELP.txt"
     exit
 }
 

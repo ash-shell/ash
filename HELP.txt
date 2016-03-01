@@ -1,0 +1,35 @@
+ _| || |_| |   / / |   (_)         / /      | |
+|_  __  _| |  / /| |__  _ _ __    / /_ _ ___| |__
+ _| || |_| | / / | '_ \| | '_ \  / / _` / __| '_ \
+|_  __  _|_|/ /  | |_) | | | | |/ / (_| \__ \ | | |
+  |_||_| (_)_/   |_.__/|_|_| |_/_/ \__,_|___/_| |_|
+
+Ash Version 0.1.0
+
+Welcome to Ash!  Please check out the README located in
+your install directory, or over at Github:
+
+https://github.com/ash-shell/ash
+
+To check out a list of your modules you can run:
+
+```
+ash apm:modules
+```
+
+If you don't have any modules installed yet, there won't
+be any output.  If you do have modules, this will list them.
+
+--------------------
+
+Get started by installing your first module!
+
+```
+ash apm:install https://github.com/ash-shell/slugify.git --global
+```
+
+and for Slugify usage:
+
+```
+ash slugify:help
+```
