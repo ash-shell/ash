@@ -20,6 +20,8 @@ Run this line right here, and you should be good to go:
 curl https://raw.githubusercontent.com/ash-shell/ash/master/install.sh | sh
 ```
 
+> [This script](/install.sh) simply clones down this repo to `/usr/local` and links the [ash file](/ash) to `/usr/local/bin`, which is usually always a `$PATH` directory.  In the event that this one liner doesn't work (or you don't want to run a script downloaded over the network), you can simply recursively clone this repo, and add the [ash file](/ash) to somewhere in your $PATH.
+
 # Modules
 
 Modules are the fundamental building blocks of Ash.  They allow you to build out custom CLI's and libraries that can be used in any other Ash module.

@@ -1,8 +1,16 @@
 #!/bin/bash
-git clone --recursive https://github.com/ash-shell/ash.git
-new_location="/usr/local/ash"
-mv "./ash" "$new_location"
+script_location="/usr/local"
 path_location="/usr/local/bin"
+current_location="$(pwd)"
+
+# Clone
+cd "$script_location"
+git clone --recursive https://github.com/ash-shell/ash.git
+
+# Add to $PATH
 cd "$path_location"
-ln -s "$new_location/ash" .
-echo "Ash successfully installed"
+ln -s "$script_location/ash/ash" .
+echo "Ash successfully installed to $script_location/ash"
+
+# Move back
+cd "$current_location"
