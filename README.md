@@ -94,7 +94,7 @@ Files in the `lib` directory are auto loaded for you in the callable portions of
 
 You can build your module to be directly callable from the command line.
 
-The first thing you will need to do in your module is add `callable_prefix` to your [ash_config.yaml](#ash-config-yaml) file.
+The first thing you will need to do in your module is add `callable_prefix` to your [ash_config.yaml](#ash_configyaml) file.
 
 ```yaml
 callable_prefix: Wrecker
