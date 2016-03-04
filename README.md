@@ -14,13 +14,38 @@ You are able to build a module independently that functions as a CLI or as a lib
 
 # Installation
 
-Run this line right here, and you should be good to go:
+Installing Ash is really straightforward.  Here I offer both a [manual install approach](#manually-recommended), and also a [simple one-liner](#via-script) you can paste in your terminal and get started immediately.
+
+The manual approach is recommended, as you will be more familiar with how Ash is set up.  You should probably also never be running scripts from the output of a curl -- but I've still supplied a one-liner as I know a lot of people want a one-liner to get started.
+
+> It's worth noting that nothing malicious is happening in the one-liner, but you totally shouldn't get in the habit of running `curl https://... | sh` as someone could hypothetially do bad things!
+
+### Manually (recommended)
+
+First, clone down this repo into a place you'd like to keep Ash.  We need to add the `--recursive` flag, as Ash has some submodules.
+
+```
+git clone --recursive https://github.com/ash-shell/ash.git
+```
+
+After you've got the repo cloned down, symlink the `ash` file (located at the root of this repo) to somewhere in your $PATH:
+
+```bash
+cd /usr/local/bin # <-- This can be anything in your $PATH
+ln -s /path/to/ash/repo/ash .
+```
+
+You should now be good to go!
+
+### via Script
+
+The script runs [this file](https://raw.githubusercontent.com/ash-shell/ash/master/install.sh).  I recommended reading it!  There's a possibility this script won't work you, as I do make an assumption that `/usr/local/bin` is in your $PATH.  In the event you don't have `/usr/local/bin` in your path, install Ash manually.
+
+After you've read the install script, run this line right here, and you should be good to go:
 
 ```bash
 curl https://raw.githubusercontent.com/ash-shell/ash/master/install.sh | sh
 ```
-
-> [This script](/install.sh) simply clones down this repo to `/usr/local` and links the [ash file](/ash) to `/usr/local/bin`, which is usually always a `$PATH` directory.  In the event that this one liner doesn't work (or you don't want to run a script downloaded over the network), you can simply recursively clone this repo, and add the [ash file](/ash) to somewhere in your $PATH.
 
 # Modules
 
