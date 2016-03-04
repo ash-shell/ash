@@ -1,5 +1,7 @@
 # Ash
 
+[![GitHub release](https://img.shields.io/github/release/ash-shell/ash.svg)](https://github.com/ash-shell/ash)
+
 Ash is a modular Bash framework written with ease of use + reusability in mind.
 
 > **Note:** This project is in early development, and versioning is a little different. [Read this](http://markup.im/#q4_cRZ1Q) for more details.
