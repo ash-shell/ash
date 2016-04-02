@@ -2,3 +2,4 @@ apm: github.com/ash-shell/apm
 logger: github.com/ash-shell/logger
 obj: github.com/ash-shell/obj
 yamlparse: github.com/ash-shell/yaml-parse
+test: github.com/ash-shell/test
