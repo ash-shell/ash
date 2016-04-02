@@ -10,3 +10,6 @@
 [submodule "core_modules/github.com/ash-shell/apm"]
 	path = core_modules/github.com/ash-shell/apm
 	url = https://github.com/ash-shell/apm.git
+[submodule "core_modules/github.com/ash-shell/test"]
+	path = core_modules/github.com/ash-shell/test
+	url = https://github.com/ash-shell/test.git
