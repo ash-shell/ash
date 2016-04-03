@@ -66,8 +66,9 @@ A module looks something like this:
 │   └── WreckerClass.sh
 |   └── ...
 └── lib
-    └── wrecker_library_file.sh
-    └── ...
+|   └── wrecker_library_file.sh
+|   └── ...
+└── test.sh
 ```
 
 > Feel free to add any folders or files you want to this -- this is simply the base structure that Ash uses.  You can't break anything by adding new folders or files.  You'll see I've even done this myself in [ash-make](https://github.com/ash-shell/ash-make).
@@ -83,6 +84,7 @@ name: Wrecker
 package: github.com/ash-shell/wrecker
 default_alias: wrecker
 callable_prefix: Wrecker
+test_prefix: Wrecker
 ```
 
 **`name`**: This is the human readable name of your module.  This value is used by other modules who might want to output the name of the current module.  This field is **required**.
@@ -92,6 +94,8 @@ callable_prefix: Wrecker
 **`default_alias`**: This is the default alias of your project.  When you install a module, it has to be aliased so it can reasonably be called by ash from the command line.  This value should be something short and sweet, and you don't need to worry about collisions with other packages (the user will be asked to come up with a new alias in the event there is a collision).  This field is **required**.
 
 **`callable_prefix`**: This field specifies the function prefix that Ash looks for in the callable file when calling upon a module (more detail in [the section below](#callable-modules)).  This field is only required for modules that provide a callable file.
+
+**`test_prefix`**: This field specifies the function prefix that [Test](https://github.com/ash-shell/test) looks for in the `test.sh` file when running tests.  This field is only required when you want to add tests to your module.
 
 #### callable.sh
 
@@ -118,6 +122,12 @@ Ash__import "your/modules/package/name"
 You can nest folders inside of `lib` for structure, but you'll need to manage importing those files yourself as `Ash__import` won't import them.
 
 Files in the `lib` directory are auto loaded for you in the callable portions of your module, so you don't have to import your own module.
+
+#### test.sh
+
+This is the file in which you can write unit tests for your modules.
+
+The README of [ash-shell/test](https://github.com/ash-shell/test) goes into full detail of how this all works.
 
 ## Callable Modules
 
