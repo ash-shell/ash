@@ -202,6 +202,10 @@ Ash_dispatch() {
     for part in "${segment[@]}"; do
         if [[ "$position" -eq 1 ]]; then
             Ash_load_callable_file "$part"
+            if [[ $? -ne 0 ]]; then
+                Logger__error "Module '$part' is unknown"
+                return
+            fi
             Ash__import "$part" "1"
         elif [[ "$position" -eq 2 ]]; then
             Ash_execute_callable "$part" "${@:2}"
@@ -236,8 +240,7 @@ Ash_load_callable_file() {
         # Updating Logger's prefix
         Logger__set_prefix "$Ash_module_config_name"
     else
-        Logger__error "Module '$part' is unknown"
-        exit
+        return 1
     fi
 }
 
