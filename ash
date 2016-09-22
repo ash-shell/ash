@@ -11,8 +11,8 @@
 # ========== Types ==========
 
 # Booleans
-Ash__TRUE="true"
-Ash__FALSE="false"
+Ash__TRUE=0     # "No Errors"
+Ash__FALSE=1    # "Has Errors"
 
 # Platforms
 Ash__PLATFORM_UNKNOWN='unknown'
