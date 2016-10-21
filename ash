@@ -284,6 +284,7 @@ Ash_import_core() {
     Ash__import "github.com/ash-shell/logger"
     Ash__import "github.com/ash-shell/yaml-parse"
     Ash__import "github.com/ash-shell/obj"
+    Ash__import "github.com/ash-shell/env"
 }
 
 #################################################
@@ -300,6 +301,9 @@ Ash_start() {
 
     # Importing the core
     Ash_import_core
+
+    # Load Env File
+    Env__load
 
     # Updating Logger prefix
     Logger__set_prefix "Ash"

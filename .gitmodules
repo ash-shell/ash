@@ -13,3 +13,6 @@
 [submodule "core_modules/github.com/ash-shell/test"]
 	path = core_modules/github.com/ash-shell/test
 	url = https://github.com/ash-shell/test.git
+[submodule "core_modules/github.com/ash-shell/env"]
+	path = core_modules/github.com/ash-shell/env
+	url = https://github.com/ash-shell/env.git
